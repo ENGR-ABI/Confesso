@@ -55,11 +55,11 @@ export function QuestionCard({
       <div className="px-6 py-4">
         {showReplies ? (
           // Show question as header when showing replies
-          <h2 className="text-xl font-semibold text-center mb-6">{question.text}</h2>
+          <h2 id="question-title" className="text-xl font-semibold text-center mb-6">{question.text}</h2>
         ) : (
           // Show question as chat bubble when not showing replies
           <div className="text-center py-4">
-            <p className="text-xl font-semibold">{question.text}</p>
+            <p id="question-text" className="text-xl font-semibold">{question.text}</p>
           </div>
         )}
 

@@ -41,10 +41,10 @@ export function ChatBubble({
       </Avatar>
       <div
         className={cn(
-          "flex-1 rounded-lg px-4 py-2 text-sm",
+          "chat-bubble flex-1 rounded-lg px-4 py-2 text-sm",
           isOutgoing
-            ? "rounded-br-none bg-gradient-to-r from-pink-500 to-blue-500 text-white"
-            : "rounded-bl-none bg-gradient-to-r from-blue-500 to-pink-500 text-white"
+            ? "outgoing rounded-br-none bg-gradient-to-r from-pink-500 to-blue-500 text-white"
+            : "incoming rounded-bl-none bg-gradient-to-r from-blue-500 to-pink-500 text-white"
         )}
       >
         {message}

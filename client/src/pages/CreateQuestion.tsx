@@ -29,7 +29,7 @@ export default function CreateQuestion() {
       
       <div className="text-center mb-8">
         <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-blue-500 mb-3">
-          Create Your Anonymous Question
+          Create Your Confesso
         </h1>
         <p className="text-lg text-white/80 max-w-2xl mx-auto">
           Ask anything and share the link to receive anonymous replies

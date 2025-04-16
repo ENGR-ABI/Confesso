@@ -18,7 +18,21 @@ export default function ViewQuestion() {
   // Fetch question data
   const { data: question, isLoading: isLoadingQuestion, error } = useQuery({
     queryKey: ['question', questionId],
-    queryFn: () => getQuestion(questionId),
+    queryFn: async () => {
+      const data = await getQuestion(questionId);
+      if (!data) {
+        return null;
+      }
+      return {
+        id: data.id,
+        text: data.text || "Question not found",
+        username: data.username || "Anonymous",
+        avatarUrl: data.avatarUrl,
+        userId: data.userId || "",
+        repliesCount: data.repliesCount || 0,
+        createdAt: data.createdAt
+      };
+    },
     staleTime: 1000 * 60, // 1 minute
   });
   

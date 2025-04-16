@@ -6,8 +6,12 @@ import { ChatBubble } from "@/components/ui/chat-bubble";
 
 interface QuestionCardProps {
   question: Question | {
+    id?: string;
     text: string;
     username: string;
+    userId?: string;
+    repliesCount?: number;
+    createdAt?: any;
     avatarUrl?: string | null;
   };
   replies?: Array<{
@@ -78,7 +82,7 @@ export function QuestionCard({
       {/* Decorative element at bottom */}
       <div className="w-full h-10 flex justify-center">
         <img 
-          src="/assets/Arrow.gif" 
+          src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaTU3eG51NzBqaWpmcTVoZHphcHU2bGZmaGNlaWJqaWlseGM5MjZhYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JV1VSu6IEHa3m/giphy.gif" 
           alt="Decorative arrow" 
           className="h-10 w-auto"
         />

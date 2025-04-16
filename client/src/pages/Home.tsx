@@ -13,7 +13,7 @@ export default function Home() {
     <div className="container mx-auto px-4 py-12 md:py-20">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-blue-500 mb-4">
-          Anonymous Messaging
+          Confesso
         </h1>
         <p className="text-xl text-white/80 max-w-2xl mx-auto">
           Create anonymous questions and get honest replies from friends
@@ -123,7 +123,7 @@ export default function Home() {
       </div>
 
       <footer className="mt-20 text-center text-white/50 text-sm">
-        <p>© {new Date().getFullYear()} Anonymous Messages. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Confesso. All rights reserved.</p>
       </footer>
     </div>
   );

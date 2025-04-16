@@ -124,26 +124,36 @@ export default function ShareQuestion({ questionId, containerRef }: ShareQuestio
 
     setIsGeneratingGif(true);
     try {
-      const dataUrl = await createGif(containerRef.current);
+      // Simpler approach: Just capture an image and save it
+      // This is a temporary solution until the GIF functionality is fixed
+      const canvas = await html2canvas(containerRef.current, {
+        allowTaint: true,
+        useCORS: true,
+        backgroundColor: "#1e0b41", // Deep purple background to match app theme
+        scale: 2, // Higher quality
+      });
+      
+      // Get the data URL from the canvas
+      const dataUrl = canvas.toDataURL("image/png");
       setGifDataUrl(dataUrl);
       
       // Create a download link
       const link = document.createElement("a");
       link.href = dataUrl;
-      link.download = `anonymous-question-${questionId}.gif`;
+      link.download = `confesso-conversation-${questionId}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       
       toast({
         title: "Downloaded!",
-        description: "Your conversation GIF has been downloaded.",
+        description: "Your conversation has been downloaded as an image.",
       });
     } catch (error) {
-      console.error("Error generating GIF:", error);
+      console.error("Error generating image:", error);
       toast({
         title: "Error",
-        description: "Failed to generate GIF. Please try again.",
+        description: "Failed to generate image. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -198,8 +208,8 @@ export default function ShareQuestion({ questionId, containerRef }: ShareQuestio
             disabled={isGeneratingGif}
             className="col-span-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white"
           >
-            <span className="mr-2">🎬</span>
-            {isGeneratingGif ? "Generating GIF..." : "Download as GIF"}
+            <span className="mr-2">📸</span>
+            {isGeneratingGif ? "Capturing..." : "Capture Conversation"}
           </Button>
         </div>
       </div>

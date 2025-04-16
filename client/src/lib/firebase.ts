@@ -48,7 +48,7 @@ export const ensureUserSignedIn = async (): Promise<User> => {
 };
 
 // Create a new question thread
-export const createQuestion = async (question: string, username: string, avatarUrl?: string) => {
+export const createQuestion = async (question: string, username: string, avatarUrl?: string | null) => {
   const user = await ensureUserSignedIn();
   
   try {
@@ -97,7 +97,7 @@ export const getQuestion = async (questionId: string) => {
 };
 
 // Add a reply to a question
-export const addReply = async (questionId: string, reply: string, username: string, avatarUrl?: string) => {
+export const addReply = async (questionId: string, reply: string, username: string, avatarUrl?: string | null) => {
   const user = await ensureUserSignedIn();
   
   try {

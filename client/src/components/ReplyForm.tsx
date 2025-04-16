@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createReplySchema } from "@/shared/schema";
+import { createReplySchema } from "@shared/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { addReply } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";

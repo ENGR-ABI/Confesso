@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Question } from "@/shared/schema";
+import { Question } from "@shared/schema";
 import { ChatBubble } from "@/components/ui/chat-bubble";
 
 interface QuestionCardProps {

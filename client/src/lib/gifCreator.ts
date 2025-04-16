@@ -6,8 +6,32 @@ type GifFrameOptions = {
   copy: boolean;
 };
 
+// Function to load an image and return it as an HTMLImageElement
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = (e) => reject(new Error(`Failed to load image: ${src}`));
+    img.src = src;
+  });
+}
+
+// Function to create animation frames for the arrow
+async function createArrowAnimation(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, arrowGifSrc: string): Promise<void> {
+  // Load the arrow GIF
+  const arrowImg = await loadImage(arrowGifSrc);
+  
+  // Calculate position for the arrow (centered at bottom)
+  const arrowX = (canvas.width / 2) - 30; // Center the 60px wide arrow
+  const arrowY = canvas.height - 80; // Position near the bottom
+  
+  // Draw the arrow
+  ctx.drawImage(arrowImg, arrowX, arrowY, 60, 60);
+}
+
 /**
- * Creates a GIF from the provided container element
+ * Creates a GIF from the provided container element with an animated arrow
  * @param container The DOM element to convert to a GIF
  * @returns Promise<string> A data URL of the generated GIF
  */
@@ -18,23 +42,16 @@ export async function createGif(container: HTMLElement): Promise<string> {
       throw new Error('Invalid container element or container has no dimensions');
     }
 
-    // First, capture a static image of the container
     console.log('Starting document clone with size', container.offsetWidth, container.offsetHeight);
     
+    // Capture the base container without animation
     const canvas = await html2canvas(container, {
       allowTaint: true,
       useCORS: true,
       logging: true,
-      backgroundColor: "#1e0b41", // Deep purple background to match app theme
+      backgroundColor: "#26065d", // Deep purple background to match design
       scale: 2, // Higher quality
     });
-    
-    // Get canvas data
-    const imageData = canvas.getContext('2d')?.getImageData(0, 0, canvas.width, canvas.height);
-    
-    if (!imageData) {
-      throw new Error('Failed to get image data from canvas');
-    }
     
     // Configuration for GIF creation
     const gifConfig = {
@@ -42,20 +59,58 @@ export async function createGif(container: HTMLElement): Promise<string> {
       quality: 10,
       width: canvas.width,
       height: canvas.height,
-      workerScript: '/gif.worker.js', // Use local worker path instead of CDN
+      workerScript: '/gif.worker.js',
+      background: '#26065d',
+      transparent: 'rgba(0,0,0,0)',
     };
 
     // Create a new GIF instance
     const gif = new GIF(gifConfig);
     
-    // Add a single frame with the captured image
-    // (we're only doing a simple animated arrow effect)
+    // Create frames for animation
+    const numFrames = 6; // Number of animation frames
+    const canvasContext = canvas.getContext('2d');
+    
+    if (!canvasContext) {
+      throw new Error('Failed to get canvas context');
+    }
+    
+    // Base frame options (longer for the first frame)
     const frameOptions: GifFrameOptions = {
       delay: 200,
       copy: true,
     };
     
-    gif.addFrame(canvas, frameOptions);
+    // Add the first frame (static base)
+    gif.addFrame(canvas, { ...frameOptions, delay: 500 });
+    
+    // Create multiple frames for arrow animation
+    // We'll just create some variation in the arrow position to simulate movement
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const tempCtx = tempCanvas.getContext('2d')!;
+    
+    // Define arrow positions for animation (slightly moving up and down)
+    const arrowPositions = [0, -3, -5, -3, 0, 3, 5, 3, 0];
+    
+    // Create and add animation frames
+    for (let i = 0; i < arrowPositions.length; i++) {
+      // Start with the base image
+      tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+      tempCtx.drawImage(canvas, 0, 0);
+      
+      // Draw the arrow at this position in the animation
+      const arrowX = (tempCanvas.width / 2) - 30;
+      const arrowY = (tempCanvas.height - 80) + arrowPositions[i];
+      
+      // Load and draw the arrow
+      const arrowImage = await loadImage('/Arrow.gif');
+      tempCtx.drawImage(arrowImage, arrowX, arrowY, 60, 60);
+      
+      // Add this frame
+      gif.addFrame(tempCanvas, { delay: 150, copy: true });
+    }
     
     // Return a Promise that resolves with the data URL when rendering is complete
     return new Promise((resolve, reject) => {

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { CopyIcon, ShareIcon, DownloadIcon, XIcon } from "lucide-react";
 import html2canvas from "html2canvas";
+import { createGif } from "@/lib/gifCreator";
 import AnonymousCardTemplate from "./AnonymousCardTemplate";
 
 interface ShareQuestionProps {
@@ -163,7 +164,7 @@ export default function ShareQuestion({ questionId, containerRef }: ShareQuestio
     if (!templateRef?.current) {
       toast({
         title: "Error",
-        description: "Could not generate card. Template not found.",
+        description: "Could not generate animated card. Template not found.",
         variant: "destructive",
       });
       return;
@@ -171,34 +172,27 @@ export default function ShareQuestion({ questionId, containerRef }: ShareQuestio
 
     setIsGeneratingGif(true);
     try {
-      const canvas = await html2canvas(templateRef.current, {
-        allowTaint: true,
-        useCORS: true,
-        backgroundColor: "#26065d",
-        scale: 2, // Higher quality
-      });
+      // Use our GIF creator function to create an animated GIF
+      const gifDataUrl = await createGif(templateRef.current);
+      setGifDataUrl(gifDataUrl);
       
-      // Get the data URL from the canvas
-      const dataUrl = canvas.toDataURL("image/png");
-      setGifDataUrl(dataUrl);
-      
-      // Create a download link
+      // Create a download link for the GIF
       const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = `confesso-conversation-${questionId}.png`;
+      link.href = gifDataUrl;
+      link.download = `confesso-conversation-${questionId}.gif`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       
       toast({
         title: "Downloaded!",
-        description: "Your card has been downloaded.",
+        description: "Your animated card has been downloaded as a GIF.",
       });
     } catch (error) {
-      console.error("Error generating card:", error);
+      console.error("Error generating animated card:", error);
       toast({
         title: "Error",
-        description: "Failed to generate card. Please try again.",
+        description: "Failed to generate animated card. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -254,7 +248,7 @@ export default function ShareQuestion({ questionId, containerRef }: ShareQuestio
               className="col-span-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white"
             >
               <span className="mr-2">📱</span>
-              Preview Conversation Card
+              Create Animated WhatsApp Card
             </Button>
           </div>
         </div>
@@ -285,7 +279,7 @@ export default function ShareQuestion({ questionId, containerRef }: ShareQuestio
                 className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white"
               >
                 <DownloadIcon className="mr-2 h-4 w-4" />
-                {isGeneratingGif ? "Generating..." : "Download Card"}
+                {isGeneratingGif ? "Creating GIF..." : "Download as Animated GIF"}
               </Button>
             </div>
           </div>

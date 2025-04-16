@@ -1,6 +1,5 @@
 import React from 'react';
-import { Stage, Layer } from 'react-konva';
-import GifImage from './GifImage';
+import { Card } from '@/components/ui/card';
 
 interface AnonymousCardTemplateProps {
   anonymousMessage: {
@@ -215,22 +214,26 @@ export default function AnonymousCardTemplate({ anonymousMessage, isReply = true
             </div>
           )}
 
-          {/* Bottom Arrow */}
-          <Stage
-            width={60}
-            height={200}
+          {/* Bottom Arrow - Using regular image for compatibility */}
+          <div
             style={{
               position: "absolute",
-              bottom: "-200px",
+              bottom: "-80px",
               left: "50%",
               transform: "translateX(-50%)",
-              objectFit: "fill",
+              width: "60px",
+              height: "60px",
             }}
           >
-            <Layer>
-              <GifImage />
-            </Layer>
-          </Stage>
+            <img 
+              src="/Arrow.gif" 
+              alt="Arrow animation" 
+              style={{
+                width: "100%",
+                height: "auto",
+              }}
+            />
+          </div>
 
         </div>
       </div>

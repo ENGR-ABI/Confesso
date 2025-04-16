@@ -1,13 +1,14 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
+
+interface AnonymousMessageProps {
+  question: string;
+  title: string;
+  respond: string;
+  answer: string;
+}
 
 interface AnonymousCardTemplateProps {
-  anonymousMessage: {
-    question?: string;
-    title?: string;
-    answer?: string;
-    respond?: string;
-  };
+  anonymousMessage: AnonymousMessageProps;
   isReply?: boolean;
 }
 
@@ -20,7 +21,7 @@ export default function AnonymousCardTemplate({ anonymousMessage, isReply = true
         position: "relative",
         alignContent: "center",
         width: "440px",
-        height: isReply ? "956px" : "700px",
+        height: "956px",
         padding: "0px 20px",
       }}
     >
@@ -117,7 +118,7 @@ export default function AnonymousCardTemplate({ anonymousMessage, isReply = true
                       }}>
                         <img
                           src="/anonym.png"
-                          alt="Ellipse"
+                          alt="Anonymous User"
                           width={104}
                           height={104}
                           style={{
@@ -142,7 +143,7 @@ export default function AnonymousCardTemplate({ anonymousMessage, isReply = true
                       </div>
                     </div>
 
-                      {/* Response chat */}
+                    {/* Response chat */}
                     <div style={{
                       display: "flex",
                       alignItems: "end",
@@ -171,7 +172,7 @@ export default function AnonymousCardTemplate({ anonymousMessage, isReply = true
                       }}>
                         <img
                           src="/me-compressed.png"
-                          alt="Ellipse"
+                          alt="User"
                           width={104}
                           height={104}
                           style={{
@@ -203,7 +204,7 @@ export default function AnonymousCardTemplate({ anonymousMessage, isReply = true
             }}>
               <img
                 src="/me-compressed.png"
-                alt="Ellipse"
+                alt="User"
                 width={64}
                 height={64}
                 style={{
@@ -214,27 +215,27 @@ export default function AnonymousCardTemplate({ anonymousMessage, isReply = true
             </div>
           )}
 
-          {/* Bottom Arrow - Using regular image for compatibility */}
+          {/* Bottom Arrow - we'll use a direct img tag for the gif to ensure it gets captured properly */}
           <div
             style={{
               position: "absolute",
-              bottom: "-80px",
+              bottom: "-100px",
               left: "50%",
               transform: "translateX(-50%)",
               width: "60px",
               height: "60px",
             }}
           >
-            <img 
-              src="/Arrow.gif" 
-              alt="Arrow animation" 
+            <img
+              src="/Arrow.gif"
+              alt="Arrow Animation"
+              width="60"
+              height="60"
               style={{
-                width: "100%",
-                height: "auto",
+                objectFit: "contain",
               }}
             />
           </div>
-
         </div>
       </div>
     </div>

@@ -44,7 +44,18 @@ export async function createGif(container: HTMLElement): Promise<string> {
 
     console.log('Starting document clone with size', container.offsetWidth, container.offsetHeight);
     
-    // Capture the base container without animation
+    // Capture the base container without animation, but don't include the arrow element
+    // We'll manually add the arrow animation in the frames
+    const arrowElement = container.querySelector('img[src="/Arrow.gif"]');
+    let arrowDisplay = 'block';
+    
+    // Hide the arrow temporarily so we can add it manually to each frame
+    if (arrowElement) {
+      arrowDisplay = (arrowElement as HTMLElement).style.display;
+      (arrowElement as HTMLElement).style.display = 'none';
+    }
+    
+    // Capture the static content
     const canvas = await html2canvas(container, {
       allowTaint: true,
       useCORS: true,
@@ -52,6 +63,11 @@ export async function createGif(container: HTMLElement): Promise<string> {
       backgroundColor: "#26065d", // Deep purple background to match design
       scale: 2, // Higher quality
     });
+    
+    // Restore the arrow visibility
+    if (arrowElement) {
+      (arrowElement as HTMLElement).style.display = arrowDisplay;
+    }
     
     // Configuration for GIF creation
     const gifConfig = {
